@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Light</string>
+    <string name="appwidget_text">倒计时</string>
+</resources>

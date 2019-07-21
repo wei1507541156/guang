@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.work.light">
+
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.autofocus" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!--Vibration permission-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!--Unlock permissions-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!--Device restart permission-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!--Ignore power optimization-->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity"
+            android:alwaysRetainTaskState="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".alarmreceiver">
+            <intent-filter>
+                <action android:name="testalarm0" />
+                <action android:name="testalarm1" />
+            </intent-filter>
+        </receiver>
+
+
+
+        <service
+            android:name=".alarm.service.AlarmService"
+            android:exported="false"
+            android:process=":alarm_service">
+            <intent-filter android:priority="1000">
+                <action android:name="cc.ibooker.zalarm.alarm_service" />
+            </intent-filter>
+        </service>
+
+
+        <service
+            android:name=".alarm.service.RemoteService"
+            android:exported="false"
+            android:process=":remote_service">
+            <intent-filter android:priority="1000">
+                <action android:name="cc.ibooker.zalarm.remote_service" />
+            </intent-filter>
+        </service>
+
+        <!--Android 5.0 JobScheduler-->
+        <service
+            android:name=".alarm.service.JobSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+
+        <receiver
+            android:name=".alarm.receiver.AlarmReceiver"
+            android:process=":alarm_service" />
+        <receiver android:name=".alarm.widget.AlarmWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/alarm_widget_info" />
+        </receiver>
+    </application>
+
+</manifest>
